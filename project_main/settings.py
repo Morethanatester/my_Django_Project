@@ -21,7 +21,7 @@ ALLOWED_HOSTS = [
     'localhost',
     'localhost:8000',
     '127.0.0.1:8000',
-    'ibank-skills-app.onrender.com',
+    'my-django-project-qbzf.onrender.com',
     ]
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
