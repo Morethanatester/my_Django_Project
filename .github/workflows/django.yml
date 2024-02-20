@@ -28,8 +28,14 @@ jobs:
     - name: Run Tests
       run: |
         python manage.py test
+    - name: Check Test Outcome
+      run: |
+        if [ "${{ steps.tests.outcome }}" != "success" ]
+        then
+          echo "Tests failed, skipping deployment."
+          exit 1
+        fi
     - name: Deploy
-      if: success()
       run: |
         # Your deployment commands here
 
