@@ -16,15 +16,17 @@ class LogMessageTests(TestCase):
     def create_LogMessage(self):
         #constructor = is the thing that runs to build the instance of the class 
         return LogMessage.objects.create(
-             message="This is a test message",log_date = timezone.now())
+            message="This is a test message",
+            log_date = timezone.now())
 
     #create test instance of logmessage
     def test_logmessage_creation(self):
         '''
         test the creation of the log message instance, does it actually creates an instance
         '''
-        log_message = self.create_LogMessage #ACT
-        self.assertTrue(isinstance(log_message, LogMessage))#ASSERT
+        log_message = self.create_LogMessage()  # Act
+        self.assertTrue(isinstance(log_message, LogMessage))
+        #ASSERT
 
 #ARRANGE
 
