@@ -28,6 +28,12 @@ class LogMessageTests(TestCase):
         self.assertTrue(isinstance(log_message, LogMessage))
         #ASSERT
 
+#failing test case to test pipeline
+        
+class SimpleTestCase(TestCase):
+    def test_always_fails(self):
+        self.fail("This test always fails")
+
 #ARRANGE
 
 #ACT
