@@ -34,4 +34,4 @@ jobs:
         git config --global user.email 'benpavey@yahoo.com'
   
     - name: Push to Production
-      run: git checkout -b production && git push https://$GH_TOKEN@github.com/Morethanatester/my_Django_Project.git production
+      run: git checkout -b production && git push https://${{ secrets.GH_TOKEN }}@github.com/Morethanatester/my_Django_Project.git production
