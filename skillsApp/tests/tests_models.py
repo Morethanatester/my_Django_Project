@@ -32,10 +32,12 @@ class LogMessageTests(TestCase):
         
 from django.test import TestCase
 
+
+'''
 class SimpleTestCase(TestCase):
     def test_always_fails(self):
         self.assertEqual(1, 2, "This test always fails because 1 is not equal to 2")
-
+'''
 #ARRANGE
 
 #ACT
