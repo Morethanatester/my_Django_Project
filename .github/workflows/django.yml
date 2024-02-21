@@ -30,8 +30,8 @@ jobs:
         python manage.py test
     - name: Push to Production
       run: |
-        git config --global user.name 'GitHub Actions'
-        git config --global user.email 'github-actions@example.com'
+        git config --global user.name 'Morethanatester'
+        git config --global user.email 'benpavey@yahoo.com'
         git checkout -b production
         git push -f origin production
       env:
