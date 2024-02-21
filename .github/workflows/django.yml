@@ -28,10 +28,11 @@ jobs:
     - name: Run Tests
       run: |
         python manage.py test
-    - name: Set up Git user
+
+    - name: Push to Production
       run: |
         git config --global user.name 'Morethanatester'
         git config --global user.email 'benpavey@yahoo.com'
-  
-    - name: Push to Production
-      run: git checkout -b production && git push https://${{ secrets.GH_TOKEN }}@github.com/Morethanatester/my_Django_Project.git production
+        git checkout -b production
+        git remote set-url origin https://${{ secrets.GH_TOKEN }}@github.com/Morethanatester/my_Django_Project.git
+        git push -u origin production
