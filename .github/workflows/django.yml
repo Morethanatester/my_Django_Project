@@ -37,4 +37,4 @@ jobs:
         git config --global user.email 'benpavey@yahoo.com'
         git checkout -b production
         git remote set-url origin https://${{ secrets.GH_TOKEN }}@github.com/Morethanatester/my_Django_Project.git
-        git push -u origin production
+        git push -f -u origin production
