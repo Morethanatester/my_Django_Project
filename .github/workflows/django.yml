@@ -26,18 +26,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Run Tests
-      id: tests
-      continue-on-error: true
       run: |
         python manage.py test
-    - name: Check Test Outcome
+    - name: Push to Production
       run: |
-        if [ "${{ steps.tests.outcome }}" != "success" ]
-        then
-          echo "Tests failed, skipping deployment."
-          exit 1
-        fi
-    - name: Deploy
-      run: |
-        # Your deployment commands here
-
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email 'github-actions@example.com'
+        git checkout -b production
+        git push -f origin production
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
