@@ -24,7 +24,7 @@ class LogMessageTests(TestCase):
         '''
         test the creation of the log message instance, does it actually creates an instance
         '''
-        log_message = self.create_LogMessage()  # Act
+        log_message = self.create_LogMessage()  #Act
         self.assertTrue(isinstance(log_message, LogMessage))
         #ASSERT
 
@@ -37,6 +37,27 @@ class SimpleTestCase(TestCase):
         self.assertEqual(1, 2, "This test always fails because 1 is not equal to 2")
 '''
 
+
+
+class LogMessageModelTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Set up non-modified objects used by all test methods
+        LogMessage.objects.create(message='Test Message', log_date=timezone.now())
+
+    def test_message_content(self):
+        log_message = LogMessage.objects.get(id=1)
+        expected_object_name = f'{log_message.message}'
+        self.assertEquals(expected_object_name, 'Test Message')
+
+    def test_log_date_content(self):
+        log_message = LogMessage.objects.get(id=1)
+        self.assertTrue(isinstance(log_message.log_date, timezone.datetime))
+
+    def test_str_representation(self):
+        log_message = LogMessage.objects.get(id=1)
+        expected_object_name = f"'{log_message.message}' logged on {log_message.log_date.strftime('%A, %d %B, %Y at %X')}"
+        self.assertEquals(str(log_message), expected_object_name)
 #ARRANGE
 
 #ACT
