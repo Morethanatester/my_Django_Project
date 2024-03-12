@@ -1,0 +1,20 @@
+#logo{
+}
+
+body{
+    background-color: #d6d8dc;
+}
+
+
+#total-faults{
+    background-color: #9d9fa2;
+}
+
+
+#faults-resolved{
+    background-color: #67f067;
+}
+
+#outstanding-faults{
+    background-color: #f15959;
+}
