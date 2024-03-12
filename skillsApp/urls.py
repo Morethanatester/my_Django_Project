@@ -14,10 +14,8 @@ urlpatterns = [
     #CRUD Functionality
 
 
+#not sure these are working/functional
 
-'''
-not 100% sure these are working/functional???
-'''
     #PASSWORD RESET URLS
     path('reset_password/',
     auth_views.PasswordResetView.as_view(template_name="skillsApp/password_reset.html"),
