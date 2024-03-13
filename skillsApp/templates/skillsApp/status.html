@@ -1,16 +1,45 @@
-{% load static %}
+<br>
 
-<!doctype html>
-<html lang="en">
+<div class="row">
+	<div class="col">
+		<div class="col-md">
+			<div class="card text-center text-white  mb-3" id="total-faults"> <!--id of card on dashboard, styles in main.html-->
+			  	<div class="card-header">
+			  		<h5 class="card-title">Total Faults</h5>
+			  	</div>
+			  	<div class="card-body">
+                    <!--<h3 class="card-title">{{total_faults}}</h3>-->
+			    	<h3 class="card-title"></h3>
+			  	</div>
+			</div>
+		</div>
+	</div>
 
-<head>
-    <meta charset="utf-8">
-    <title>Status.html</title>
-    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+	<div class="col">
+		<div class="col-md">
+			<div class="card text-center text-white  mb-3" id="faults-resolved"> <!--id of card on dashboard, styles in main.html-->
+			  	<div class="card-header">
+			  		<h5 class="card-title">Faults Resolved</h5>
+			  	</div>
+			  	<div class="card-body">
+                    <!--<h3 class="card-title">{{total_faults}}</h3>-->
+			    	<h3 class="card-title"></h3>
+			  	</div>
+			</div>
+		</div>
+	</div>
 
-</head>
-
-
-</main>
-</body>
-</html>
+	<div class="col">
+		<div class="col-md">
+			<div class="card text-center text-white  mb-3" id="outstanding-faults"> <!--id of card on dashboard, styles in main.html-->
+			  	<div class="card-header">
+			  		<h5 class="card-title">Outstanding Faults </h5>
+			  	</div>
+			  	<div class="card-body">
+                    <!--<h3 class="card-title">{{filtered_faults}}</h3>-->
+			    	<h3 class="card-title">{{filtered_faults}}</h3>
+			  	</div>
+			</div>
+		</div>
+	</div>
+</div>

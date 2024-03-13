@@ -2,7 +2,12 @@ from django.test import TestCase
 #imports for microsoft project test demo
 from django.utils import timezone
 from skillsApp.models import *
+from skillsApp.forms import *
 import datetime
+from django.test import TestCase, Client
+from django.contrib.auth import get_user_model
+import uuid
+from django.db import DatabaseError
 ###
 
 
@@ -10,11 +15,8 @@ import datetime
 # Create your tests here.
 
 
-        #ASSERT
-
 #failing test case to test pipeline
         
-from django.test import TestCase
 '''
 class SimpleTestCase(TestCase):
     def test_always_fails(self):
@@ -43,34 +45,28 @@ class LogMessageTests(TestCase):
         log_message = self.create_LogMessage()  #Act
         self.assertTrue(isinstance(log_message, LogMessage))
 
-
-
-
-
-
-class LogMessageModelTest(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        # Set up non-modified objects used by all test methods
-        LogMessage.objects.create(message='Test Message', log_date=timezone.now())
-
-    def test_message_content(self):
-        log_message = LogMessage.objects.get(id=1)
-        expected_object_name = f'{log_message.message}'
-        self.assertEquals(expected_object_name, 'Test Message')
-
-    def test_log_date_content(self):
-        log_message = LogMessage.objects.get(id=1)
-        self.assertTrue(isinstance(log_message.log_date, timezone.datetime))
-
-    def test_str_representation(self):
-        log_message = LogMessage.objects.get(id=1)
-        expected_object_name = f"'{log_message.message}' logged on {log_message.log_date.strftime('%A, %d %B, %Y at %X')}"
-        self.assertEquals(str(log_message), expected_object_name)
-
-        
-        
-        #ARRANGE   #ACT   #ASSERT
-
-
 '''
+
+# This test case class contains tests related to security aspects of the application.
+class SecurityTest(TestCase):
+
+# This setup method is run before each test. It sets up a client for making requests and a test user.
+    def setUp(self):
+        self.client = Client() # Arrange
+        self.user = get_user_model().objects.create_user( # Arrange
+            username='testuser',
+            password='testpass123'
+        )
+
+# This test checks that a CSRF token is included in the register page.
+    def test_csrf(self):
+        response = self.client.get('/register/') # Act
+        self.assertContains(response, 'csrfmiddlewaretoken') # Assert
+
+# This test checks that sensitive data (the password) is not included in the response after logging in.
+    def test_sensitive_data_exposure(self):
+        response = self.client.post('/login/', { # Act
+            'username': 'testuser',
+            'password': 'testpass123'
+        }, follow=True)
+        self.assertNotContains(response, 'testpass123') # Assert

@@ -1,0 +1,43 @@
+{% extends 'skillsApp/main.html' %}
+{% block content %}
+{%  include 'skillsApp/status.html' %}
+
+<div class="row">
+	<div class="col-md">
+		<div class="card card-body">
+			<table class="table table-sm">
+
+					<tr>
+							<th>Fault ID</th>
+							<th>Category</th>
+							<th>Date Raised</th>
+							<th>Status</th>
+
+					</tr>
+
+				<!--{% for ticket in ticket %}-->
+				<tr>
+					<!--child.parent.childattribute-->
+
+					<!--<td>{{ticket.incident}}</td>-->
+					<!--<td>{{ticket.category}}</td>-->
+					<!--<td>{{ticket.date_raised}}</td>-->
+					<!--<td>{{ticket.status}}</td>-->
+
+                    
+                    
+                    <td>ticket.incident</td>
+					<td>ticket.category</td>
+					<td>ticket.date_raised</td>
+					<td>ticket.status</td>
+					
+	
+				</tr>
+				<!--{% endfor %}-->
+			</table>
+		</div>
+	</div>
+</div>
+
+
+{% endblock content %}

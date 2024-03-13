@@ -6,12 +6,18 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path("", views.home, name='home'),
     path("home/", views.home, name='home'),
+    path('user/', views.userPage, name="user-page"),
     path('faults/', views.faults, name = "faults"),
     path('settings/', views.Settings, name="settings"),
+    
+    
     path('login/', views.loginPage, name = "login"),
-    path('logout/', views.logoutUser, name = "logout"),
+    path('register/', views.registerPage, name = "register"),
+    #path('logout/', views.logoutUser, name = "logout"),
 
     #CRUD Functionality
+
+
 
 
 #not sure these are working/functional
@@ -44,7 +50,7 @@ urlpatterns = [
 urlpatterns = [
     path('user/', views.userPage, name="user-page"),
     path('colleagues/<str:pk>/', views.colleagues, name="colleagues"), #pk from view.py colleagues
-    path('register/', views.registerPage, name = "register"),
+    
     path('create_fault/<str:pk>/', views.createFault, name = "create_fault"), # HANDLES CREATE CRUD FUNCTION, PASSED INTO DASHBOARD HTML CREATE FAULT BUTTON
     path('update_fault/<str:pk>/', views.updateFault, name = "update_fault"),
     path('delete_fault/<str:pk>/', views.deleteFault, name = "delete_fault"),

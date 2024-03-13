@@ -1,18 +1,37 @@
 {% extends 'skillsApp/main.html' %}
 
-
 {% block content %}
-
 		<br>
 
 		<div class="row">
 			<div class="col-md">
 				<div class="card card-body">
-					<h5>This a the html Faults Page</h5>
+					<h5>Faults</h5>
+				</div>
+				<div class="card card-body">
+					<table class="table">
+						<tr>
+							<th>Title</th>
+							<th>Category</th>
+							<th>Status</th>
+							<th>Date Raised</th>
+						</tr>
+						<!-- looping through faults model, using views function? to populate table-->
+						<!--{% for i in faults %}-->
+							<tr>
+							<!--<td>{{i.title}}</td> <!add a row for each-->
+							<!--<td>{{i.category}}</td>-->
+							<!--<td>{{i.status}}</td>-->
+							<!--<td>{{i.date_raised}}</td>-->
+							
+							</tr>
+						<!--{% endfor %}-->
+						
+					</table>
 				</div>
 			</div>
 			
 		</div>
 
+
 {% endblock %}
-        
