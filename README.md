@@ -1,7 +1,3 @@
-test change to test main merge into production, if tests pass
+add some tests
 
-commented out failure test, to see/hope workflow merges main branch code to production
-
-another change
-
-new secrets
+add decorators to limit views log ins etc

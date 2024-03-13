@@ -57,7 +57,13 @@ class SecurityTest(TestCase):
             username='testuser',
             password='testpass123'
         )
-
+        self.colleague = Colleague.objects.create(
+            user=self.user,
+            first_name='Test',
+            last_name='User',
+            email='testuser@example.com',
+            colleagueID='testuser123'
+        )
 # This test checks that a CSRF token is included in the register page.
     def test_csrf(self):
         response = self.client.get('/register/') # Act
