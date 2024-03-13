@@ -12,6 +12,7 @@ urlpatterns = [
     
     
     path('login/', views.loginPage, name = "login"),
+    path('accounts/login/', views.loginPage, name='login'),#@login_required(login_url='login')
     path('register/', views.registerPage, name = "register"),
     path('logout/', views.logoutUser, name = "logout"),
 

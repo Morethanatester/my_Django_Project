@@ -11,12 +11,12 @@ from .models import Colleague
 from .forms import ColleagueForm
 from django import forms
 
-
+from .decorators import unauthenticated_user, allowed_users, admin_only
 #Import all(*) project models/forms
 from .models import *
 from .forms import * 
 
-
+@login_required()
 def home(request):
     tickets = Ticket.objects.all()
     colleagues = Colleague.objects.all()
@@ -66,6 +66,7 @@ def settings(request):
 ''' TODO, not implemented'
 @unauthenticated_user
 '''
+@unauthenticated_user
 def registerPage(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
@@ -85,6 +86,7 @@ def registerPage(request):
 
 
 #login page, allows users to login
+@unauthenticated_user
 def loginPage(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
