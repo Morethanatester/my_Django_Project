@@ -5,6 +5,8 @@ from django.contrib import messages #django flash messages -- https://docs.djang
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.http import QueryDict
+from django.shortcuts import get_object_or_404
 from .models import Colleague
 from .forms import ColleagueForm
 from django import forms
@@ -14,30 +16,23 @@ from django import forms
 from .models import *
 from .forms import * 
 
-def home(request):
-    return render (request, 'skillsApp/dashboard.html')
 
-'''
-    faults = Ticket.objects.all()
+def home(request):
+    tickets = Ticket.objects.all()
     colleagues = Colleague.objects.all()
 
+    context = {'tickets':tickets, 
+               'colleagues':colleagues} 
 
-    #used to print data onto the dashboard cards through status, count is just counting all
-    total_resolved = colleagues.count() #TODO, needs to filter total faults resolved not colleagues and changed in status.html to show correct data
-    total_faults = faults.count()
-    outstanding = faults.filter(status='Triage').count() #TODO, needs to filter just open tickets
-    filtered_faults = faults.filter(category='Software').count()
-
-
-    context = {'faults':faults, 'colleagues':colleagues,
-               'total_resolved': total_resolved,
-               'total_faults': total_faults, 
-               'outstanding': outstanding,
-               'filtered_faults':filtered_faults } 
-
-    return render(request, 'skillsApp/dashboard.html', context)
-'''
-
+    if request.user.is_staff:
+        # Render the admin dashboard
+        return render(request, 'skillsApp/admin_dashboard.html', context)
+    else:
+        tickets = Ticket.objects.filter(colleague=request.user.colleague)
+        context = {'tickets':tickets, 
+               'colleagues':colleagues}
+        # Render the standard user dashboard
+        return render(request, 'skillsApp/standard_dashboard.html', context)
 
 
 
@@ -159,6 +154,60 @@ def userPage(request):
 
 
 
+#@login_required
+#CRUD CREATE FUNCTION
+
+def createTicket(request, colleague_id=None):
+    if colleague_id is not None:
+        colleague = get_object_or_404(Colleague, colleagueID=colleague_id)
+    else:
+        colleague = request.user.colleague
+
+    if request.method == 'POST':
+        form = TicketForm(request.POST, user=request.user, colleague=colleague)
+        if form.is_valid():
+            ticket = form.save(commit=False)
+            ticket.colleague = request.user.colleague
+            ticket.save()
+            return redirect('home')
+    else:
+        form = TicketForm(user=request.user, colleague=colleague)
+    context = {'form': form}
+    return render(request, 'skillsApp/create_ticket.html', context)
+
+
+
+#CRUD UPDATE FUNCTION, GET ticket and update it
+def updateTicket(request, pk):
+    ticket = Ticket.objects.get(id=pk)
+    if request.user.is_staff or request.user == ticket.colleague.user:
+        form = TicketUpdateForm(instance=ticket, user=request.user)
+        if request.method == 'POST':
+            form = TicketUpdateForm(request.POST, instance=ticket, user=request.user)
+            if form.is_valid():
+                form.save()
+                return redirect('home')
+        context = {'form': form}
+        return render(request, 'skillsApp/update_ticket.html', context)
+    else:
+        return redirect('home')
+    
+
+#CRUD DELETE FUNCTION, GET ticket and delete it
+def deleteTicket(request, pk):
+    if request.user.is_staff:
+        ticket = Ticket.objects.get(id=pk)
+        if request.method == 'POST':
+            ticket.delete()
+            return redirect('home')
+        context = {'item': ticket}
+        return render(request, 'skillsApp/delete_ticket.html', context)
+    else:
+        return redirect('home')
+
+
+
+
 #accountsettings page, allows users to update profile info
 
 ''' TODO, not implemented
@@ -183,20 +232,15 @@ def accountSettings(request):
 #CRUD views
 
 
-
-''' TODO, not implemented
+'''
+not yet implemented
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])
 '''
-'''
-def deleteFault(request, pk):
-	fault = Ticket.objects.get(id=pk) 
-	if request.method == "POST":
-		fault.delete() #CRUD DELETE FUNCTION, GET variable fault and delete it
-		return redirect('/')
+def colleagues(request, pk):
+    colleague = Colleague.objects.get(id=pk)
+    form = ColleagueForm(instance=colleague)  # Initialize the form with the 'colleague' instance
 
-	context = {'item':fault}
-	return render(request, 'ticket_app/delete.html', context)
-'''
-#HANDLES CREATE CRUD FUNCTION, PASSED INTO DASHBOARD HTML CREATE FAULT BUTTON
-
+    ticket = colleague.ticket_set.all()
+    context = {'colleague':colleague, 'ticket':ticket, 'form': form}  # Include the form in the context
+    return render(request, 'skillsApp/colleagues.html',context)

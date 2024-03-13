@@ -15,7 +15,14 @@ urlpatterns = [
     path('register/', views.registerPage, name = "register"),
     path('logout/', views.logoutUser, name = "logout"),
 
+    path('colleagues/<str:pk>/', views.colleagues, name="colleagues"), #pk from view.py colleagues
+
     #CRUD Functionality
+
+    path('create_ticket/', views.createTicket, name = "create_ticket"),
+    path('create_ticket/<str:colleague_id>/', views.createTicket, name='create_ticket_for_colleague'),
+    path('update_ticket/<str:pk>/', views.updateTicket, name = "update_ticket"),
+    path('delete_ticket/<str:pk>/', views.deleteTicket, name = "delete_ticket"),
 
 
 
@@ -51,9 +58,7 @@ urlpatterns = [
     path('user/', views.userPage, name="user-page"),
     path('colleagues/<str:pk>/', views.colleagues, name="colleagues"), #pk from view.py colleagues
     
-    path('create_fault/<str:pk>/', views.createFault, name = "create_fault"), # HANDLES CREATE CRUD FUNCTION, PASSED INTO DASHBOARD HTML CREATE FAULT BUTTON
-    path('update_fault/<str:pk>/', views.updateFault, name = "update_fault"),
-    path('delete_fault/<str:pk>/', views.deleteFault, name = "delete_fault"),
+
 
 
 ]

@@ -6,27 +6,28 @@
 <div class="row">
 	<div class="col-md-3">
 		<div class="card card-body">
-			<a class="btn btn-warning" href="{% url 'home' %}"> &#8592; Back to Profile</a>
+			<button type="button" onclick="location.href='{% url 'home' %}'">Back to Dashboard</button>
 			<hr>
 			<h3 style="text-align: center">Account Settings</h3>
 			<hr>
-		 
-		
 		</div>
 	</div>
 	<div class="col-md-9">
 		<div class="card card-body">
-
-<!--FORM NOT BEING RENDERED-->
-
-			<form method="POST" action="" enctype="multipart/form-data">
+			<form method="POST" action="" enctype="multipart/form-data" style="display: flex; flex-direction: column; align-items: flex-start;">
 				{% csrf_token %}
-				{{form.as_p}}
-		
-			<input class="btn btn-primary" type="submit" name="Update Information">
+				{% for field in form %}
+					<div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+						<div style="width: 30%;">{{ field.label_tag }}</div>
+						<div style="width: 70%;">{{ field }}</div>
+					</div>
+				{% endfor %}
+				<br>
+				<button type="submit">Update Information</button>
+
+
 			</form>
 		</div>
 	</div>
 </div>
 {% endblock %}
-

@@ -1,0 +1,97 @@
+{% extends 'skillsApp/main.html' %}
+
+{% block content %}
+
+<br>
+
+<a class="btn btn-secondary btn-sm" href="{% url 'create_ticket' %}">Raise New Fault</a>
+
+<div class="row">
+	<div class="col-md">
+		<div class="card card-body">
+			<h5>iBank Adminstrator Panel.</h5>
+			<hr>
+
+			<p>All iBank Colleagues are displayed below. Please select View to open customer details and update thier records as required<p>
+			<p>All iBank Faults are displayed below. Please select inline button update the fault records or delete as required<p>
+		</div>
+	</div>
+</div>
+<br><Br>
+<div class="row">
+	<div class="col-md-5">
+		<h5>Colleagues:</h5>
+		<hr>
+		<div class="card card-body">
+			<table class="table table-sm">
+				
+				<tr>
+					<th>Colleague ID</th>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Job Role</th>
+					<th></th>
+					<th></th>  <!-- Add a new header for the "Create Ticket" column -->
+				</tr>
+				
+				{% for colleague in colleagues %}
+					<tr>
+						<td>{{colleague.colleagueID}}</td>
+						<td>{{colleague.user.first_name}}</td>
+						<td>{{colleague.user.last_name}}</td>
+						<td>{{colleague.jobfamily}}</td>
+						<td><a class="btn btn-sm btn-info" href="{% url 'colleagues' colleague.id %}">View</a></td>
+						<td><a class="btn btn-sm btn-secondary" href="{% url 'create_ticket_for_colleague' colleague.colleagueID %}">Create Ticket</a></td>  <!-- Add a new cell with the "Create Ticket" button -->
+					</tr>
+				{% endfor %}
+
+			</table>
+		</div>
+	</div>
+
+
+	<div class="col-md-7">
+		<h5>Faults:</h5>
+		<hr>
+		<div class="card card-body">
+			
+			<table class="table table-sm">
+				<tr>
+					<th>Username</th>
+					<th>Ticket ID</th>
+					<th>Title</th>
+                    <th>Category</th>
+					<th>Status</th>
+					<th>Last Updated</th>
+                    <th>Assignee</th>
+					<th>Update</th>
+					{% if request.user.is_staff %}
+					<th>Remove</th>
+					{% endif %}
+
+				</tr>
+
+            {% for ticket in tickets %} <!-- looping through faults model, using views function? to populate table-->
+                <tr>
+                    <td>{{ticket.colleague.user.username}}</td>
+					<td>{{ticket.incident}}</td> <!--TODO add fault ID attribute-->
+                    <td>{{ticket.title}}</td><!--TODO, CHNAGE THIS TO FAULTS RAISED BY THIS COLLEAGUE-->
+                    <td>{{ticket.category}}</td>
+                    <td>{{ticket.status}}</td>
+                    <td>{{ticket.date_raised}}</td>
+                    <td>{{ticket.assignee_team}}</td>
+                    <td><a class="btn btn-sm btn-info" href="{% url 'update_ticket' ticket.id %}">Update</td> <!--CRUD UPDATE  BUTTON, calls update_fault dynamic <str:pk> url-->
+					{% if request.user.is_staff %}
+						<td><a class="btn btn-sm btn-danger" href="{% url 'delete_ticket' ticket.id %}">Delete</a></td>
+					{% endif %}
+                </tr>
+            {% endfor %}
+
+	
+			</table>
+		</div>
+	</div>
+
+</div>
+
+{% endblock %}

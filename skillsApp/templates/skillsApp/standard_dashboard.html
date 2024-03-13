@@ -1,0 +1,82 @@
+{% extends 'skillsApp/main.html' %}
+{% block content %}
+
+<br>
+<div class="row">
+	<div class="col-md-2">
+		<div class="card card-body">
+			<h5>Colleague Actions: </h5>
+			<a class="btn btn-secondary btn-sm" href="{% url 'settings' %}">Account Details</a>
+			<br>
+			<a class="btn btn-secondary btn-sm" href="{% url 'create_ticket' %}">Raise New Fault</a>
+		</div>
+	</div>
+
+	<div class="col-md">
+		<div class="card card-body">
+
+			{% for message in messages %}
+			<p id="messages">{{message}}</p>
+			{% endfor %}
+
+			<h5>Welcome, {{request.user}} to the iBank Colleague Fault IT Service Desk.</h5>
+			<hr>
+
+			<p>The iBank Colleague Fault IT Service Desk, can be used for colleagues who need to raise new faults, and update existing faults. Colleagues are also able to view the most recent information on all faults have raised. Please also select the <Account Details> button to ensure your colleague information is up to date. This will allow for quicker fault remediation. <p>
+
+			<p>Please also select the <Account Details> button to ensure your colleague information is up to date. This will allow for quicker fault remediation. <p>
+
+			<p>Please select required action, using the buttons on the left. All Existing faults are shown below<p>
+
+			
+		</div>
+	</div>
+</div>
+
+<br>
+
+<div class="row">
+	<div class="col-md">
+		<div class="card card-body">
+				<table class="table table-sm">
+				<h5>Colleague Faults</h5>
+				<tr>
+					<th>Username</th>
+					<th>Ticket ID</th>
+					<th>Title</th>
+					<th>Category</th>
+					<th>Summary</th>
+					<th>Status</th>
+					<th>Priority</th>
+					<th>Date Raised</th>
+                    <th>Last Update</th>
+                    <th>Assigned Team</th>
+					<th>Update</th>
+					
+				</tr>
+			
+                {% for ticket in tickets %} <!-- looping through faults model, using views function? to populate table-->
+                <tr>
+                    <td>{{ticket.colleague.user.username}}</td>
+					<td>{{ticket.incident}}</td> <!--TODO add fault ID attribute-->
+                    <td>{{ticket.title}}</td><!--TODO, CHNAGE THIS TO FAULTS RAISED BY THIS COLLEAGUE-->
+                    <td>{{ticket.category}}</td>
+                    <td>{{ticket.summary}}</td>
+                    <td>{{ticket.status}}</td>
+                    <td>{{ticket.priority}}</td>
+                    <td>{{ticket.date_raised}}</td>
+                    <td>{{ticket.last_updated}}</td>
+                    <td>{{ticket.assignee_team}}</td>
+                    <td><a class="btn btn-sm btn-info" href="{% url 'update_ticket' ticket.id %}">Update</td> <!--CRUD UPDATE  BUTTON, calls update_fault dynamic <str:pk> url-->
+					{% if request.user.is_staff %}
+						<td><a class="btn btn-sm btn-danger" href="{% url 'delete_ticket' ticket.id %}">Delete</a></td>
+					{% endif %}
+                </tr>
+            {% endfor %}
+
+			</table>
+		</div>
+	</div>
+</div>
+
+{% endblock content %}

@@ -2,6 +2,17 @@
 
 {% block content %}
 
-this is the colleague page
+<div class="container" style="max-width: 600px;">
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                <input type="text" class="form-control" id="{{ field.id_for_label }}" value="{{ field.value }}" readonly>
+            </div>
+        {% endfor %}
+    </form>
+    <a href="{% url 'home' %}" class="btn btn-primary">Back to Dashboard</a>
+</div>
 
 {% endblock %}

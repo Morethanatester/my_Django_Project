@@ -1,0 +1,23 @@
+{% extends 'skillsApp/main.html' %}
+
+{% block content %}
+    <body>
+        <div style="display: flex; justify-content: center; align-items: center; height: 80vh;">
+            <div>
+                <h2 style="text-align: center;">Raise New Fault</h2>
+                <form method="POST" style="display: flex; flex-direction: column; align-items: flex-start;">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <div style="width: 30%;">{{ field.label_tag }}</div>
+                            <div style="width: 70%;">{{ field }}</div>
+                        </div>
+                    {% endfor %}
+                    <button type="submit">Create</button>
+                    <p2>OR</p2>
+                    <button type="button" onclick="location.href='{% url 'home' %}'">Go back to Dashboard</button>
+                </form>
+            </div>
+        </div>
+    </body>
+{% endblock %}
