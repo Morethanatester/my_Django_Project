@@ -36,3 +36,11 @@ class RegisterForm(UserCreationForm):
             )
 
         return user
+    
+
+class ColleagueForm(forms.ModelForm):
+    class Meta:
+        model = Colleague
+        fields = '__all__'  # This will include all fields in the form
+        exclude = ['user', 'date_joined', 'colleagueID', 'status']
+

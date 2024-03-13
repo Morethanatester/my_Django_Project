@@ -2,9 +2,11 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout # for login functionality
 from django.contrib import messages #django flash messages -- https://docs.djangoproject.com/en/3.0/ref/contrib/messages/#using-messages-in-views-and-templates
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import Colleague
+from .forms import ColleagueForm
 from django import forms
 
 
@@ -42,68 +44,33 @@ def home(request):
 def faults(request):
     return render(request, 'skillsApp/faults.html')
 
-def Settings(request):
+
+@login_required()
+def settings(request):
+    if request.method == 'POST':
+        form = ColleagueForm(request.POST, instance=request.user.colleague)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your settings have been updated.')
+            return redirect('home')
+    else:
+        form = ColleagueForm(instance=request.user.colleague)
+    context = {'form': form}
+    return render(request, 'skillsApp/settings.html', context)
+
+
+
+
+
     return render(request, 'skillsApp/settings.html')
 
 
-def loginPage(request):
-    return render(request, 'skillsApp/login.html')
 
 
-'''
-    if request.method == 'POST':
-        
-
-        #get values from field from login.html page
-        username = request.POST.get('username') 
-        password = request.POST.get('password')
-
-        #authenticate user exists in database
-        user = authenticate(request, username=username, password=password) 
-        
-        #if user exists redirect to homepage
-        if user is not None:
-            login(request, user)
-            return redirect('home')
-        
-        else:
-            messages.info(request, 'username OR password is incorrect')
-
-    context = {}
-    return render(request, 'skillsApp/login.html', context)
-
-def logoutUser(request):
-    logout(request) # use Django method
-    return redirect('login')
-'''
-
-
-
-
+#register page, allows users to create an account
 ''' TODO, not implemented'
 @unauthenticated_user
 '''
-'''
-def registerPage(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            #get username from form attributes
-            username = form.cleaned_data.get('username') 
-            messages.success(request, "Account created for " + username ) #temporarily displays messages 
-            return redirect("login") #returns to login after registering
-    else:
-        form = UserCreationForm()
-    context = {'form':form} #pass form into context
-    return render(request, 'skillsApp/register.html', context)
-
-class ColleagueForm(forms.ModelForm):
-    class Meta:
-        model = Colleague
-        fields = ['first_name', 'last_name', 'email', 'date_joined']
-'''
-
 def registerPage(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
@@ -112,10 +79,38 @@ def registerPage(request):
             username = form.cleaned_data.get('username')
             messages.success(request, 'Account was created for ' + username)
             return redirect('login')
+        else:
+            for field in form:
+                for error in field.errors:
+                    messages.error(request, f"{field.label}: {error}")
     else:
         form = RegisterForm()
     context = {'form': form}
     return render(request, 'skillsApp/register.html', context)
+
+
+#login page, allows users to login
+def loginPage(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('home')
+            else:
+                messages.info(request, 'Username OR password is incorrect')
+    else:
+        form = AuthenticationForm()
+    context = {'form': form}
+    return render(request, 'skillsApp/login.html', context)
+
+#logout page, allows users to logout
+def logoutUser(request):
+    logout(request) # use Django method
+    return redirect('login')
 
 '''
     #middleware refactoring, have to do this if/else for every class needed to restrict logged in users viewing a page

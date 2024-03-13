@@ -8,12 +8,12 @@ urlpatterns = [
     path("home/", views.home, name='home'),
     path('user/', views.userPage, name="user-page"),
     path('faults/', views.faults, name = "faults"),
-    path('settings/', views.Settings, name="settings"),
+    path('settings/', views.settings, name="settings"),
     
     
     path('login/', views.loginPage, name = "login"),
     path('register/', views.registerPage, name = "register"),
-    #path('logout/', views.logoutUser, name = "logout"),
+    path('logout/', views.logoutUser, name = "logout"),
 
     #CRUD Functionality
 

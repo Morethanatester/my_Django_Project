@@ -1,8 +1,25 @@
-<!DOCTYPE html>
-<html>
-    
-<head>
-	<title>Login</title>
+{% extends 'skillsApp/main.html' %}
 
+{% block content %}
+    <body>
+        <div style="display: flex; justify-content: center; align-items: center; height: 40vh;">
+            <div>
+                <h2>Login</h2>
+                <form method="POST" style="display: flex; flex-direction: column; align-items: center;">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div style="display: flex; justify-content: space-between; width: 100%;">
+                        <button type="submit">Login</button>
+                        <a href="{% url 'register' %}" style="text-decoration: none;">
+                            <button type="button">Register</button>
+                        </a>
+                    </div>
+                </form>
 
-	login
+                {% for message in messages %}
+                    <p id="messages">{{ message }}</p>
+                {% endfor %}
+            </div>
+        </div>
+    </body>
+{% endblock %}
