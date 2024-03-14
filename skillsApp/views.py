@@ -180,20 +180,20 @@ def createTicket(request, colleague_id=None):
 
 
 #CRUD UPDATE FUNCTION, GET ticket and update it
-    def updateTicket(request, pk):
-        ticket = Ticket.objects.get(id=pk)
-        if request.user.is_staff or request.user == ticket.colleague.user:
-            form = TicketUpdateForm(instance=ticket, user=request.user)
-            if request.method == 'POST':
-                form = TicketUpdateForm(request.POST, instance=ticket, user=request.user)
-                if form.is_valid():
-                    form.save()
-                    return redirect('home')
-            context = {'form': form}
-            return render(request, 'skillsApp/update_ticket.html', context)
-        else:
-            return redirect('home')
-        
+def updateTicket(request, pk):
+    ticket = Ticket.objects.get(id=pk)
+    if request.user.is_staff or request.user == ticket.colleague.user:
+        form = TicketUpdateForm(instance=ticket, user=request.user)
+        if request.method == 'POST':
+            form = TicketUpdateForm(request.POST, instance=ticket, user=request.user)
+            if form.is_valid():
+                form.save()
+                return redirect('home')
+        context = {'form': form}
+        return render(request, 'skillsApp/update_ticket.html', context)
+    else:
+        return redirect('home')
+    
 
 #CRUD DELETE FUNCTION, GET ticket and delete it
 def deleteTicket(request, pk):
