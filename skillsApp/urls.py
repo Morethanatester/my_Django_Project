@@ -7,7 +7,7 @@ urlpatterns = [
     path("", views.home, name='home'),
     path("home/", views.home, name='home'),
     path('user/', views.userPage, name="user-page"),
-    path('faults/', views.faults, name = "faults"),
+    #path('faults/', views.faults, name = "faults"),
     path('settings/', views.settings, name="settings"),
     
     

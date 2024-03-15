@@ -2,9 +2,12 @@
 
 {% block content %}
     <body>
-        <div style="display: flex; justify-content: center; align-items: center; height: 40vh;">
+        <div style="display: flex; justify-content: center; align-items: center; height: 60vh;">
             <div>
                 <h2 style="text-align: center;">Register</h2>
+                {% for message in messages %}
+                    <p id="messages" style="color: red;">{{ message }}</p>
+                {% endfor %}
                 <form method="POST" style="display: flex; flex-direction: column; align-items: flex-start;">
                     {% csrf_token %}
                     {% for field in form %}

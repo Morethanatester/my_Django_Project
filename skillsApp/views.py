@@ -35,10 +35,10 @@ def home(request):
         return render(request, 'skillsApp/standard_dashboard.html', context)
 
 
-
+'''
 def faults(request):
     return render(request, 'skillsApp/faults.html')
-
+'''
 
 @login_required()
 def settings(request):
@@ -55,17 +55,7 @@ def settings(request):
 
 
 
-
-
-    return render(request, 'skillsApp/settings.html')
-
-
-
-
 #register page, allows users to create an account
-''' TODO, not implemented'
-@unauthenticated_user
-'''
 @unauthenticated_user
 def registerPage(request):
     if request.method == 'POST':
@@ -83,7 +73,6 @@ def registerPage(request):
         form = RegisterForm()
     context = {'form': form}
     return render(request, 'skillsApp/register.html', context)
-
 
 #login page, allows users to login
 @unauthenticated_user
@@ -105,6 +94,7 @@ def loginPage(request):
     return render(request, 'skillsApp/login.html', context)
 
 #logout page, allows users to logout
+@login_required
 def logoutUser(request):
     logout(request) # use Django method
     return redirect('login')
@@ -156,9 +146,9 @@ def userPage(request):
 
 
 
-#@login_required
-#CRUD CREATE FUNCTION
 
+#CRUD CREATE FUNCTION
+@login_required
 def createTicket(request, colleague_id=None):
     if colleague_id is not None:
         colleague = get_object_or_404(Colleague, colleagueID=colleague_id)
@@ -180,6 +170,7 @@ def createTicket(request, colleague_id=None):
 
 
 #CRUD UPDATE FUNCTION, GET ticket and update it
+@login_required
 def updateTicket(request, pk):
     ticket = Ticket.objects.get(id=pk)
     if request.user.is_staff or request.user == ticket.colleague.user:
@@ -196,6 +187,8 @@ def updateTicket(request, pk):
     
 
 #CRUD DELETE FUNCTION, GET ticket and delete it
+@login_required
+@allowed_users(["admin"])
 def deleteTicket(request, pk):
     if request.user.is_staff:
         ticket = Ticket.objects.get(id=pk)
@@ -211,11 +204,8 @@ def deleteTicket(request, pk):
 
 
 #accountsettings page, allows users to update profile info
-
-''' TODO, not implemented
-#@login_required(login_url='login')
-#@allowed_users(allowed_roles=['user'])
-'''
+@login_required
+@allowed_users(['standard'])
 def accountSettings(request):
     return render(request, 'skillsApp/account_settings.html')
 
@@ -239,6 +229,7 @@ not yet implemented
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])
 '''
+@login_required
 def colleagues(request, pk):
     colleague = Colleague.objects.get(id=pk)
     form = ColleagueForm(instance=colleague)  # Initialize the form with the 'colleague' instance

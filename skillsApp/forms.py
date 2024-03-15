@@ -73,7 +73,7 @@ class TicketForm(forms.ModelForm):
 class TicketUpdateForm(forms.ModelForm):
     class Meta:
         model = Ticket
-        fields = ['title', 'category', 'summary', 'priority', 'assignee_team', 'status']
+        fields = ['title', 'category', 'summary', 'priority', 'assignee_team', 'status', 'recreate']
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
