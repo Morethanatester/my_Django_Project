@@ -17,11 +17,11 @@ from django.db import DatabaseError
 
 #failing test case to test pipeline
         
-
+'''
 class SimpleTestCase(TestCase):
     def test_always_fails(self):
         self.assertEqual(1, 2, "This test always fails because 1 is not equal to 2")
-
+'''
 
 
 '''

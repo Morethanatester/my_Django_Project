@@ -6,8 +6,6 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path("", views.home, name='home'),
     path("home/", views.home, name='home'),
-    path('user/', views.userPage, name="user-page"),
-    #path('faults/', views.faults, name = "faults"),
     path('settings/', views.settings, name="settings"),
     
     
@@ -48,21 +46,3 @@ urlpatterns = [
     name="password_reset_complete"),
 
 ]
-
-
-
-
-
-'''
-
-urlpatterns = [
-    path('user/', views.userPage, name="user-page"),
-    path('colleagues/<str:pk>/', views.colleagues, name="colleagues"), #pk from view.py colleagues
-    
-
-
-
-]
-
-
-'''
