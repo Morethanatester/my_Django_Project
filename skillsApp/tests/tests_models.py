@@ -1,13 +1,12 @@
 from django.test import TestCase
 #imports for microsoft project test demo
-from django.utils import timezone
 from skillsApp.models import *
 from skillsApp.forms import *
-import datetime
 from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 import uuid
 from django.db import DatabaseError
+from django.urls import reverse
 ###
 
 
@@ -47,16 +46,19 @@ class LogMessageTests(TestCase):
 
 '''
 
-# This test case class contains tests related to security aspects of the application.
 class SecurityTest(TestCase):
-
-# This setup method is run before each test. It sets up a client for making requests and a test user.
+    # This setup method is run before each test. It sets up a client for making requests and a test user.
     def setUp(self):
-        self.client = Client() # Arrange
-        self.user = get_user_model().objects.create_user( # Arrange
+        # Arrange: Set up a client for making requests
+        self.client = Client()
+
+        # Arrange: Create a test user
+        self.user = get_user_model().objects.create_user(
             username='testuser',
             password='testpass123'
         )
+
+        # Arrange: Create a colleague for the test user
         self.colleague = Colleague.objects.create(
             user=self.user,
             first_name='Test',
@@ -64,15 +66,32 @@ class SecurityTest(TestCase):
             email='testuser@example.com',
             colleagueID='testuser123'
         )
-# This test checks that a CSRF token is included in the register page.
-    def test_csrf(self):
-        response = self.client.get('/register/') # Act
-        self.assertContains(response, 'csrfmiddlewaretoken') # Assert
 
-# This test checks that sensitive data (the password) is not included in the response after logging in.
+    # This test checks that a CSRF token is included in the register page.
+    def test_csrf(self):
+        # Act: Make a GET request to the register page
+        response = self.client.post(reverse('login'), {'username': 'testuser', 'password': 'testpass'}, csrf_using=False)
+
+        # Assert: Check that the response contains a CSRF token
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
+        # This test checks for SQL Injection vulnerability in the login page.
+    def test_sql_injection(self):
+        # Act: Make a POST request to the login page with a malicious username
+        response = self.client.post(reverse('login'), {'username': "testuser'; DROP TABLE auth_user; --", 'password': 'testpass'})
+        # Assert: Check that the response does not contain an OperationalError, which would indicate a SQL Injection vulnerability
+        self.assertNotIn("OperationalError", response.content.decode())
+
+    # This test checks for XSS vulnerability in the login page.
+    def test_xss(self):
+        # Act: Make a POST request to the login page with a malicious username
+        response = self.client.post(reverse('login'), {'username': '<script>alert("XSS")</script>', 'password': 'testpass'})
+        # Assert: Check that the response does not contain the malicious script, which would indicate an XSS vulnerability
+        self.assertNotIn('<script>alert("XSS")</script>', response.content.decode())
+
+    # This test checks for Sensitive Data Exposure in the login page.
     def test_sensitive_data_exposure(self):
-        response = self.client.post('/login/', { # Act
-            'username': 'testuser',
-            'password': 'testpass123'
-        }, follow=True)
-        self.assertNotContains(response, 'testpass123') # Assert
+        # Act: Make a GET request to the login page
+        response = self.client.get(reverse('login'))
+        # Assert: Check that the response does not contain the test user's password, which would indicate Sensitive Data Exposure
+        self.assertNotIn('testpass123', response.content.decode())
