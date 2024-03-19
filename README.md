@@ -28,3 +28,5 @@ Login - Autenticated users can login, invalid credentials will view a Flash mess
 
 Admin user full suite of CRUD functionality and can create, retrive, update and delete IT Faults
 Standard users can create, retreive and update thier own IT faults only. Standard users can also update user profile if required.
+
+standard users have limited fields available on fault form, admin users have elavated fields to create/update tickets, i.e assigned tickets to a team, change ticket status.

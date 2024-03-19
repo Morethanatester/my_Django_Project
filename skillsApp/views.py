@@ -95,23 +95,40 @@ def logoutUser(request):
 
 
 #CRUD CREATE FUNCTION
-@login_required
+@login_required  # Decorator to ensure only logged-in users can access this view
 def createTicket(request, colleague_id=None):
+    # If a colleague_id is provided, get the Colleague object with that ID
     if colleague_id is not None:
         colleague = get_object_or_404(Colleague, colleagueID=colleague_id)
     else:
-        colleague = request.user.colleague
+        # If the logged-in user is a superuser, set colleague to None
+        if request.user.is_superuser:
+            colleague = None
+        else:
+            # Otherwise, set colleague to the Colleague object associated with the logged-in user
+            colleague = request.user.colleague
 
+    # If the request method is POST, this means the form is being submitted
     if request.method == 'POST':
+        # Create a TicketForm instance with the submitted data
         form = TicketForm(request.POST, user=request.user, colleague=colleague)
+        # If the form is valid, save the form but don't commit to the database yet
         if form.is_valid():
             ticket = form.save(commit=False)
-            ticket.colleague = request.user.colleague
+            # If colleague is not None, set the ticket's colleague to the selected colleague
+            if colleague is not None:
+                ticket.colleague = colleague
+            # Save the ticket to the database
             ticket.save()
+            # Redirect the user to the home page
             return redirect('home')
     else:
+        # If the request method is not POST, this means the form is being displayed
+        # So create a new TicketForm instance without any data
         form = TicketForm(user=request.user, colleague=colleague)
+    # Create the context dictionary
     context = {'form': form}
+    # Render the create_ticket.html template with the context
     return render(request, 'skillsApp/create_ticket.html', context)
 
 
