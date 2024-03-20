@@ -30,3 +30,18 @@ Admin user full suite of CRUD functionality and can create, retrive, update and 
 Standard users can create, retreive and update thier own IT faults only. Standard users can also update user profile if required.
 
 standard users have limited fields available on fault form, admin users have elavated fields to create/update tickets, i.e assigned tickets to a team, change ticket status.
+
+## Referances
+
+https://docs.djangoproject.com/en/5.0/
+https://www.w3schools.com/
+https://docs.render.com/
+https://learn.microsoft.com/en-us/docs/
+https://www.geeksforgeeks.org/
+https://github.com/github/docs
+
+
+
+
+
+    
