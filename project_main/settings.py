@@ -35,6 +35,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'scout_apm.django',
     'skillsApp',
     'django.contrib.admin',
     'django.contrib.auth',
